@@ -32,9 +32,50 @@ await device.toggle(true) // turn on the device
 await device.toggle(false) // turn off the device
 ```
 
-The `username` and `password` are your Tapo credentials when using the app.
+The `username` and `password` are your tplink account credentials used here: [TP-Link Tapo](https://apps.apple.com/us/app/tp-link-tapo/id1472718009)
 
 The `ip` is the local ip address of the device you want to access.
+
+## Discovering device IP
+Use `getLocalDevices` to list all the devices connected to your tplink account that is available in your local network. (filtered by device mac address)
+```typescript
+import { getLocalDevices, getToken } from "@hzabala/tplink-smart-api"
+const token = await getToken('sample@gmail.com', 'password')
+const localDevices = await getLocalDevices(token)
+
+console.log(localDevices)
+```
+In this example, if you have a 3rd P105 plug that is connected to another local network then it will not be listed.
+```console
+[
+  {
+    ip: '192.168.1.12',
+    type: 'SMART.TAPOPLUG',
+    name: 'P105',
+    alias: 'AC 2',
+    mac: '*redacted*',
+    model: 'P105',
+    status: 0
+  },
+  {
+    ip: '192.168.1.14',
+    type: 'SMART.TAPOPLUG',
+    name: 'P105',
+    alias: 'AC 2',
+    mac: '*redacted*',
+    model: 'P105',
+    status: 0
+  }
+]  
+```
+Alternatively, you can use `arp` to lookup devices in your local network and manually filter them by name. (in this case, you only need `tapo_smartplug`)
+```console
+foo@bar:~$ arp -a
+iphone (192.168.1.7) at *redacted* on en0 ifscope [ethernet]
+mbp (192.168.1.8) at *redacted* on en0 ifscope [ethernet]  
+tapo_smartplug (192.168.1.12) at *redacted* on en0 ifscope [ethernet]
+tapo_smartplug (192.168.1.14) at *redacted* on en0 ifscope [ethernet]  
+```
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss what you would like to change.
