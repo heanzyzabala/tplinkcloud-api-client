@@ -15,8 +15,11 @@ export class P105 {
   private cookie: string
   private token: string
 
+  private url: string
+
   constructor(option: P105Option) {
     this.ip = option.ip
+    this.url = `http://${this.ip}/app`
     this.username = option.username
     this.password = option.password
     this.resolveKeyPair(option.keyPair)
@@ -36,7 +39,6 @@ export class P105 {
 
   async handshake(): Promise<P105HandshakeResponse> {
     try {
-      const url = `http://${this.ip}/app`
       const payload = {
         method: 'handshake',
         params: {
@@ -44,7 +46,7 @@ export class P105 {
           requestTimeMils: Math.round(Date.now() * 1000),
         },
       }
-      const res = await axios.post(url, payload)
+      const res = await axios.post(this.url, payload)
       if (res.data.error_code !== 0) {
         throw new Error(`Received error: ${JSON.stringify(res.data)}`)
       }
@@ -63,7 +65,6 @@ export class P105 {
 
   async login(): Promise<P105LoginResponse> {
     try {
-      const url = `http://${this.ip}/app`
       const hashedUsername = crypto.createHash('sha1').update(this.username).digest('hex')
       const encodedUsername = Buffer.from(hashedUsername).toString('base64')
       const encodedPassword = Buffer.from(this.password).toString('base64')
@@ -88,7 +89,7 @@ export class P105 {
           Cookie: this.cookie,
         },
       }
-      const res = await axios.post(url, securePayload, config)
+      const res = await axios.post(this.url, securePayload, config)
       if (res.data.error_code !== 0) {
         throw new Error(`Received error: ${JSON.stringify(res.data)}`)
       }
@@ -110,7 +111,6 @@ export class P105 {
 
   async toggle(status: boolean): Promise<void> {
     try {
-      const url = `http://${this.ip}/app?token=${this.token}`
       const payload = {
         method: 'set_device_info',
         params: {
@@ -131,7 +131,7 @@ export class P105 {
           Cookie: this.cookie,
         },
       }
-      const res = await axios.post(url, securePayload, config)
+      const res = await axios.post(`${this.url}?token=${this.token}`, securePayload, config)
       if (res.data.error_code !== 0) {
         throw new Error(`Received error: ${JSON.stringify(res.data)}`)
       }
