@@ -1,5 +1,5 @@
 {
-  "name": "@hzabala/tplink-smart-api",
+  "name": "@hzabala/tplinkcloud-api-client",
   "version": "0.1.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heanzyzabala/tplink-smart-api.git"
+    "url": "git+https://github.com/heanzyzabala/tplinkcloud-api-client.git"
   },
   "author": "Heanzy Zabala",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heanzyzabala/tplink-smart-api.git/issues"
+    "url": "https://github.com/heanzyzabala/tplinkcloud-api-client.git/issues"
   },
-  "homepage": "https://github.com/heanzyzabala/tplink-smart-api",
+  "homepage": "https://github.com/heanzyzabala/tplinkcloud-api-client",
   "dependencies": {
     "axios": "^0.24.0",
     "local-devices": "^3.2.0"

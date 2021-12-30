@@ -2,7 +2,7 @@ import * as crypto from 'crypto'
 import * as find from 'local-devices'
 import { getDevices } from './tpcloud'
 
-import { CipherParam, KeyPair, Device, LocalDevice } from './types'
+import { CipherParam, KeyPair, DeviceInfo } from './types'
 
 export const generateKeyPair = (): KeyPair => {
   return crypto.generateKeyPairSync('rsa', {
@@ -47,7 +47,7 @@ export const decrypt = (cipherParam: CipherParam, payload: any): string => {
   return decrypted
 }
 
-export const getLocalDevices = async (token: string): Promise<LocalDevice[]> => {
+export const getLocalDevices = async (token: string): Promise<DeviceInfo[]> => {
   const devices = await getDevices(token)
   const localDevices = await find()
   return localDevices
@@ -56,16 +56,12 @@ export const getLocalDevices = async (token: string): Promise<LocalDevice[]> => 
       return devices.find((d: any) => d.deviceMac === l.mac)
     })
     .map((l) => {
-      const device = devices.find((d) => d.deviceMac) as Device
+      const device = devices.find((d) => d.deviceMac) as DeviceInfo
       const buffer = Buffer.from(device.alias, 'base64')
       return {
-        ip: l.ip,
-        type: device.deviceType,
-        name: device.deviceName,
-        alias: buffer.toString('utf8'),
-        mac: device.deviceMac,
-        model: device.deviceModel,
-        status: device.status,
+        ...device,
+        alias: buffer.toString('utf-8'),
+        ipAddress: l.ip,
       }
     })
 }

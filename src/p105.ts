@@ -1,7 +1,7 @@
 import axios from 'axios'
 import * as crypto from 'crypto'
 
-import { CipherParam, KeyPair, P105HandshakeResponse, P105LoginResponse, P105Option } from './types'
+import { CipherParam, KeyPair, HandshakeResponse, LoginResponse } from './types'
 import { decrypt, decryptHandshakeKey, encrypt, generateKeyPair } from './util'
 
 export class P105 {
@@ -17,12 +17,12 @@ export class P105 {
 
   private url: string
 
-  constructor(option: P105Option) {
-    this.ip = option.ip
+  constructor(ip: string, username: string, password: string, keyPair?: KeyPair) {
+    this.ip = ip
     this.url = `http://${this.ip}/app`
-    this.username = option.username
-    this.password = option.password
-    this.resolveKeyPair(option.keyPair)
+    this.username = username
+    this.password = password
+    this.resolveKeyPair(keyPair)
   }
 
   private resolveKeyPair(keyPair?: KeyPair) {
@@ -37,7 +37,7 @@ export class P105 {
     }
   }
 
-  async handshake(): Promise<P105HandshakeResponse> {
+  async handshake(): Promise<HandshakeResponse> {
     try {
       const payload = {
         method: 'handshake',
@@ -63,7 +63,7 @@ export class P105 {
     }
   }
 
-  async login(): Promise<P105LoginResponse> {
+  async login(): Promise<LoginResponse> {
     try {
       const hashedUsername = crypto.createHash('sha1').update(this.username).digest('hex')
       const encodedUsername = Buffer.from(hashedUsername).toString('base64')

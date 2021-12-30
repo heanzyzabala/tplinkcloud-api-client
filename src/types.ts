@@ -1,38 +1,33 @@
 import { AxiosResponse } from 'axios'
 
-export interface P105HandshakeResponse {
+export interface HandshakeResponse {
   axiosResponse: AxiosResponse
   cipherParam: CipherParam
 }
 
-export interface P105LoginResponse {
+export interface LoginResponse {
   axiosResponse: AxiosResponse
   token: string
 }
-export interface P105Option {
-  ip: string
-  username: string
-  password: string
-  keyPair?: KeyPair
-}
 
-export interface LocalDevice {
-  ip: string
-  type: string
-  name: string
-  alias: string
-  mac: string
-  model: string
-  status: number
-}
-
-export interface Device {
+export interface DeviceInfo {
   deviceType: string
+  role: number
+  fwVer: string
+  appServerUrl: string
+  deviceRegion: string
+  deviceId: string
   deviceName: string
+  deviceHwVer: string
   alias: string
   deviceMac: string
+  oemId: string
   deviceModel: string
+  hwId: string
+  fwId: string
+  isSameRegion: boolean
   status: number
+  ipAddress?: string
 }
 export interface KeyPair {
   privateKey: string

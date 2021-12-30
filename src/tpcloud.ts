@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Device } from './types'
+import { DeviceInfo } from './types'
 
-export const getDevices = async (token: string): Promise<Device[]> => {
+export const getDevices = async (token: string): Promise<DeviceInfo[]> => {
   const payload = {
     method: 'getDeviceList',
   }
