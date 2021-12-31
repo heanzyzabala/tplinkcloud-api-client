@@ -1,33 +1,28 @@
-# TP-Link Smart API
+# TP-Link Cloud API Client
 <p align="left">
   <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License MIT"/></a>
 <p>
 
-A simple library to interact with a TP-Link Tapo P105. 
+A simple library to interact with TP-Link cloud devices. (Currently supports Tapo P105)
 
 ## Installation
 Install using npm:
 ```bash
-npm i @hzabala/tplink-smart-api
+npm i @hzabala/tplinkcloud-api-client
 ```
 
 ## Usage
-Create an instance of `P105` and provide required `P105Option`. 
+Create a `P105` and provide required credentials.
 
-Initially, you need to perform a handshake and login before executing an action, any subsequent actions are automatically authenticated.
+Perform a handshake and login before executing an action, any subsequent actions are automatically authenticated.
 
 ```typescript
-import { P105, P105Option } from "@hzabala/tplink-smart-api"
+import { P105 } from '@hzabala/tplinkcloud-api-client'
 
-const option: P105Option = {
-  ip: "192.168.1.14",
-  username: "sample@gmail.com",
-  password: "password",
-};
-
-const device = new P105(option)
+const device = new P105('192.168.1.14', 'sample@gmail.com', 'password')
 await device.handshake()
 await device.login()
+
 await device.toggle(true) // turn on the device
 await device.toggle(false) // turn off the device
 ```
@@ -37,9 +32,9 @@ The `username` and `password` are your tplink account credentials used here: [TP
 The `ip` is the local ip address of the device you want to access.
 
 ## Discovering device IP
-Use `getLocalDevices` to list all the devices connected to your tplink account that is available in your local network. (filtered by device mac address)
+Use `getLocalDevices` to list all the devices connected to your tplink account that's available in your local network. (filtered by device mac address)
 ```typescript
-import { getLocalDevices, getToken } from "@hzabala/tplink-smart-api"
+import { getLocalDevices, getToken } from "@hzabala/tplinkcloud-api-client"
 const token = await getToken('sample@gmail.com', 'password')
 const localDevices = await getLocalDevices(token)
 
@@ -49,24 +44,41 @@ In this example, if you have a 3rd P105 plug that is connected to another local 
 ```console
 [
   {
-    ip: '192.168.1.12',
-    type: 'SMART.TAPOPLUG',
-    name: 'P105',
-    alias: 'AC 2',
-    mac: '*redacted*',
-    model: 'P105',
+    deviceType: 'SMART.TAPOPLUG',
+    role: 0,
+    fwVer: '1.3.2 Build 20210122 Rel. 57063',
+    appServerUrl: 'https://aps1-wap.tplinkcloud.com',
+    deviceRegion: 'ap-southeast-1',
+    deviceId: '*redacted*',
+    deviceName: 'P105',
+    deviceHwVer: '1.0.0',
+    alias: 'Bedroom 1',
+    deviceMac: '*redacted*',
+    oemId: '*redacted*',
+    deviceModel: 'P105',
+    hwId: '*redacted*',
+    fwId: '*redacted*',
+    isSameRegion: true,
     status: 0
   },
   {
-    ip: '192.168.1.14',
-    type: 'SMART.TAPOPLUG',
-    name: 'P105',
-    alias: 'AC 2',
-    mac: '*redacted*',
-    model: 'P105',
+    deviceType: 'SMART.TAPOPLUG',
+    role: 0,
+    fwVer: '1.3.2 Build 20210122 Rel. 57063',
+    appServerUrl: 'https://aps1-wap.tplinkcloud.com',
+    deviceRegion: 'ap-southeast-1',
+    deviceId: '*redacted*',
+    deviceName: 'P105',
+    deviceHwVer: '1.0.0',
+    alias: 'Bedroom 2',
+    deviceMac: '*redacted*',
+    oemId: '*redacted*',
+    deviceModel: 'P105',
+    hwId: '*redacted*',
+    fwId: '*redacted*',
+    isSameRegion: true,
     status: 0
   }
-]  
 ```
 Alternatively, you can use `arp` to lookup devices in your local network and manually filter them by name. (in this case, you only need `tapo_smartplug`)
 ```console
