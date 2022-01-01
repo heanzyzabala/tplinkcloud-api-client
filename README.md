@@ -12,7 +12,7 @@ npm i @hzabala/tplinkcloud-api-client
 ```
 
 ## Usage
-Create a `P105` and provide required credentials.
+Create a `P105` instance and provide required credentials.
 
 Perform a handshake and login before executing an action, any subsequent actions are automatically authenticated.
 
